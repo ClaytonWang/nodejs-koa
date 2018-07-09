@@ -29,12 +29,12 @@ function addMapping(router, mapping) {
 }
 
 function addControllers(router, dir) {
-    var ctldir = path.resolve(__dirname, '..');
-    fs.readdirSync(ctldir + '/' + dir).filter((f) => {
+    var rootdir = path.resolve(__dirname, '..');
+    fs.readdirSync(rootdir + '/' + dir).filter((f) => {
         return f.endsWith('.js');
     }).forEach((f) => {
         console.log(`process controller: ${f}...`);
-        let mapping = require(ctldir + '/' + dir + '/' + f);
+        let mapping = require(rootdir + '/' + dir + '/' + f);
         addMapping(router, mapping);
     });
 }

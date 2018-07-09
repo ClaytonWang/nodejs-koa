@@ -1,3 +1,5 @@
+const path = require('path');
+
 const Koa = require('koa');
 
 const bodyParser = require('koa-bodyparser');
@@ -24,7 +26,7 @@ app.use(staticFiles('/static/', __dirname + '/static'));
 app.use(bodyParser());
 
 // add nunjucks as view:
-app.use(templating('views', {
+app.use(templating(__dirname+'/views', {
     noCache: true,
     watch: true
 }));
@@ -35,5 +37,5 @@ app.use(rest.restify());
 // add controllers:
 app.use(controller());
 
-app.listen(3000);
+app.listen(3001);
 console.log('app started at port 3000...');
