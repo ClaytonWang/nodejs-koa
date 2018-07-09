@@ -1,14 +1,20 @@
-const path = require('path');
-
 const Koa = require('koa');
 
 const bodyParser = require('koa-bodyparser');
 
-const controller = require('./core/controller');
+const controller = require('./app/core/controller');
 
-const templating = require('./core/templating');
+const templating = require('./app/core/templating');
 
-const rest = require('./core/rest');
+const rest = require('./app/core/rest');
+
+const dirStatic = __dirname + '/app/static';
+
+const dirViews = __dirname+'/app/views';
+
+const dirCtrls = __dirname+'/app/controllers';
+
+const port = 3000;
 
 const app = new Koa();
 
@@ -19,14 +25,14 @@ app.use(async (ctx, next) => {
 });
 
 // static file support:
-let staticFiles = require('./core/static-files');
-app.use(staticFiles('/static/', __dirname + '/static'));
+let staticFiles = require('./app/core/static-files');
+app.use(staticFiles('/static/', dirStatic));
 
 // parse request body:
 app.use(bodyParser());
 
 // add nunjucks as view:
-app.use(templating(__dirname+'/views', {
+app.use(templating(dirViews, {
     noCache: true,
     watch: true
 }));
@@ -35,7 +41,10 @@ app.use(templating(__dirname+'/views', {
 app.use(rest.restify());
 
 // add controllers:
-app.use(controller());
+app.use(controller(dirCtrls));
 
-app.listen(3001);
-console.log('app started at port 3000...');
+app.listen(port,()=>{
+    console.log(`app started at port ${port}...`);
+});
+
+
